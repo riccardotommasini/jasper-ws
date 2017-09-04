@@ -1,0 +1,14 @@
+.classpath
+.project
+.settings
+target/*
+log/*
+
+*.init
+*.pyc
+
+*.iml
+*.idea
+
+*.DS_Store
+*.log
