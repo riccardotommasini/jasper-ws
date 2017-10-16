@@ -7,12 +7,10 @@ ENV ENGINE $ENGINE
 ENV RSP_HOME /opt/rspservice
 
 # Install JAR and queries
-COPY ./rspservice-${ENGINE}/target/rspservice-${ENGINE}-0.0.1-jar-with-dependencies.jar ${RSP_HOME}/engine.jar
+COPY ./target/*${ENGINE}*jar-with-dependencies.jar ${RSP_HOME}/engine.jar
 
-ADD ./config/default.properties ${RSP_HOME}/default.properties
+ADD ./default.properties ${RSP_HOME}/default.properties
 ADD ./start_rsp_server.sh ${RSP_HOME}/start_rsp_server.sh
-
-ADD ./data  ${RSP_HOME}/data
 
 RUN chmod u+x ${RSP_HOME}/start_rsp_server.sh
 

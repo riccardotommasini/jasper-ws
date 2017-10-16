@@ -11,6 +11,7 @@ import it.polimi.jasper.engine.JenaRSPQLEngineImpl;
 import it.polimi.jasper.engine.stream.GraphStreamItem;
 import it.polimi.yasper.core.engine.RSPEngine;
 import it.polimi.yasper.core.stream.RegisteredStream;
+import it.polimi.yasper.core.utils.EncodingUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.rdf.model.*;
@@ -55,7 +56,7 @@ public class JasperRDFStream implements Stream {
 
     @Override
     public String getStreamID() {
-        return stream.getInternalName();
+        return EncodingUtils.encode(stream.getURI());
     }
 
     @Override

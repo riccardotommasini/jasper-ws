@@ -12,17 +12,17 @@
         <dependency>
             <groupId>it.polimi.sr.yasper</groupId>
             <artifactId>yasper-core</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>it.polimi.sr.yasper</groupId>
             <artifactId>yasper-jena</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>be.ugent.idlab</groupId>
             <artifactId>rspservice-common</artifactId>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
