@@ -23,7 +23,6 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.riot.system.IRIResolver;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,11 +64,10 @@ public class JasperEngine implements RSPEngine {
     }
 
     @Override
-    public Stream registerStream(String streamName, String uri) {
-        String fullName = IRIResolver.resolveFileURL("streams/" + streamName);
-        StreamImpl s = new StreamImpl(fullName);
+    public Stream registerStream(String id, String uri) {
+        StreamImpl s = new StreamImpl(id);
         RegisteredStream regs = (RegisteredStream) engine.register(s);
-        JasperRDFStream js = new JasperRDFStream(regs, fullName, streamName, engine);
+        JasperRDFStream js = new JasperRDFStream(regs, regs.getURI(), id, engine);
 
         if (uri != null && !uri.isEmpty()) {
             extractMetadata(uri, js);
@@ -123,28 +121,33 @@ public class JasperEngine implements RSPEngine {
 
     @Override
     public Query registerQuery(String queryName, QueryType queryType, String queryBody, List<String> streams, List<String> graphs, String tbox_location, String ruleSet) throws Exception {
+
         RSPQuery continuousQuery = (RSPQuery) engine.parseQuery(queryBody);
         Model tbox = ModelFactory.createDefaultModel();
 
-        if (!"".equals(tbox_location)) {
+        if (tbox_location != null && !tbox_location.isEmpty() && !"None".equals(tbox_location)) {
             tbox.read(tbox_location);
         }
+        Entailment e = null;
+        JasperRuleSet jasperRuleSet = null;
 
-        Entailment e = !"".equals(ruleSet) ? ruleSets.get(ruleSet).getRules() : null;
+        if (ruleSet != null && !ruleSet.isEmpty() && ruleSets.containsKey(ruleSet)) {
+            jasperRuleSet = ruleSets.get(ruleSet);
+            e = jasperRuleSet.getRules();
+        }
 
         ContinuousQueryExecution cqe = engine.register(continuousQuery, tbox, Maintenance.NAIVE, e, false);
 
         JasperQueryObserverResultObserver handler = new JasperQueryObserverResultObserver(queryName, queryType, cqe);
-        return new JasperQuery(queryName, queryBody, queryType, streams, graphs, continuousQuery, default_config, handler);
+        return new JasperQuery(queryName, queryBody, queryType, streams, graphs, continuousQuery, default_config, handler, jasperRuleSet);
 
     }
 
     public Query registerQuery(String queryName, QueryType queryType, String queryBody, List<String> streams, List<String> graphs) throws Exception {
         RSPQuery continuousQuery = (RSPQuery) engine.parseQuery(queryBody);
         ContinuousQueryExecution cqe = engine.register(continuousQuery, default_config);
-
         JasperQueryObserverResultObserver handler = new JasperQueryObserverResultObserver(queryName, queryType, cqe);
-        return new JasperQuery(queryName, queryBody, queryType, streams, graphs, continuousQuery, default_config, handler);
+        return new JasperQuery(queryName, queryBody, queryType, streams, graphs, continuousQuery, default_config, handler, null);
     }
 
 
@@ -158,7 +161,7 @@ public class JasperEngine implements RSPEngine {
     @Override
     public RuleSet registerRuleSet(String s, String s1) {
         Entailment register = engine.register(s, s1);
-        JasperRuleSet jasperRuleSet = new JasperRuleSet(s, register);
+        JasperRuleSet jasperRuleSet = new JasperRuleSet(s, register, s1);
         ruleSets.put(s, jasperRuleSet);
         return jasperRuleSet;
     }

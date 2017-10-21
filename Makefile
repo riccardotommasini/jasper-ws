@@ -10,7 +10,7 @@ clean:
 
 build:
 	docker rmi $(IMG_TAG); true
-	docker build -t $(IMG_TAG) --build-arg ENGINE=$(ENGINE) s-${ENGINE}/
+	docker build -t $(IMG_TAG) --build-arg ENGINE=$(ENGINE) /
 
 run:
 	docker rm $(ENGINE)_running; true

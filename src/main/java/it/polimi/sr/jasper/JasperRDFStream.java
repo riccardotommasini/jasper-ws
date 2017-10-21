@@ -33,9 +33,9 @@ public class JasperRDFStream implements Stream {
     private RegisteredStream stream;
     private Session session;
 
-    public JasperRDFStream(RegisteredStream s, String fullName, String streamName, JenaRSPQLEngineImpl engine) {
+    public JasperRDFStream(RegisteredStream s, String id, String streamName, JenaRSPQLEngineImpl engine) {
         this.stream = s;
-        this.id = fullName;
+        this.id = id;
         this.engine = engine;
         this.status = RSPComponentStatus.RUNNING;
         this.shortName = streamName;

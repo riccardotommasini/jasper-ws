@@ -5,6 +5,7 @@ import be.ugent.idlab.rspservice.common.enumerations.RSPComponentStatus;
 import be.ugent.idlab.rspservice.common.interfaces.AbstractQueryResultProxy;
 import be.ugent.idlab.rspservice.common.interfaces.Query;
 import be.ugent.idlab.rspservice.common.interfaces.QueryResultObserverWrapper;
+import be.ugent.idlab.rspservice.common.interfaces.RuleSet;
 import it.polimi.jasper.engine.query.RSPQuery;
 import it.polimi.yasper.core.query.ContinuousQuery;
 import it.polimi.yasper.core.utils.QueryConfiguration;
@@ -26,13 +27,14 @@ public class JasperQuery implements Query {
     private AbstractQueryResultProxy resultProxy = null;
     private HashMap<String, QueryResultObserverWrapper> observers = null;
     private RSPComponentStatus status = null;
+    private RuleSet ruleSet;
 
     public JasperQuery(
             String queryName, String body, QueryType queryType,
             List<String> streams, List<String> graphs,
             ContinuousQuery continuousQuery,
             QueryConfiguration default_config,
-            JasperQueryObserverResultObserver handler) {
+            JasperQueryObserverResultObserver handler, RuleSet ruleSet) {
 
         this.config = default_config;
         this.body = body;
@@ -44,6 +46,7 @@ public class JasperQuery implements Query {
         this.status = RSPComponentStatus.RUNNING;
         this.resultProxy = handler;
         this.observers = new HashMap<>();
+        this.ruleSet = ruleSet;
 
     }
 
@@ -111,5 +114,10 @@ public class JasperQuery implements Query {
     @Override
     public AbstractQueryResultProxy getResultProxy() {
         return resultProxy;
+    }
+
+    @Override
+    public RuleSet getRuleSet() {
+        return ruleSet;
     }
 }
