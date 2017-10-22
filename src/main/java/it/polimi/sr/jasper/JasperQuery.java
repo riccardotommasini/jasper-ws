@@ -53,7 +53,7 @@ public class JasperQuery implements Query {
     @Override
     public boolean addObserver(QueryResultObserverWrapper observer) {
         if (!observers.containsKey(observer.getID())) {
-            resultProxy.addObserver(observer.getObserver());
+                resultProxy.addObserver(observer.getObserver());
             observers.put(observer.getID(), observer);
             return true;
         }

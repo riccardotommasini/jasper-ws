@@ -65,7 +65,7 @@ public class JasperQueryObserverResultObserver extends AbstractQueryResultProxy 
             } else if (arg instanceof ConstructResponse) {
                 ConstructResponse sr = (ConstructResponse) arg;
                 if (sr.getCep_timestamp() != last_result && distinct) {
-                    sr.getResults().write(os, "TTL");
+                    sr.getResults().write(os, "JSON-LD");
                     last_result = sr.getCep_timestamp();
                 }
             }
